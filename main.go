@@ -41,12 +41,21 @@ func main() {
 		"password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName)
 
+	log.Println("DB connection string" + connectionString)
+
 	db, err := sql.Open("postgres", connectionString)
 
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("Connected to DB successfully")
 
 	r := mux.NewRouter()
 
@@ -61,6 +70,6 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Println("Initialising server...")
+	log.Println("Starting server...")
 	log.Fatal(srv.ListenAndServe())
 }

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,8 +13,22 @@ type TitlesHandler struct {
 	titlesRepository *repository.TitlesRepository
 }
 
-func (*TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hi"))
+func (t *TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	title, err := t.titlesRepository.FetchTitle(id)
+	if err != nil {
+		panic(err)
+	}
+
+	b, err := json.Marshal(title)
+
+	if err != nil {
+		panic(err)
+	}
+
+	w.Write(b)
 }
 
 func NewTitlesHandler(r *mux.Router, titlesRepository *repository.TitlesRepository) {
