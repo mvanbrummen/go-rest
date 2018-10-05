@@ -22,10 +22,16 @@ func (t *TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	b, err := json.Marshal(title)
+	var b []byte
 
-	if err != nil {
-		panic(err)
+	if title == nil {
+		b = []byte("{}")
+	} else {
+		b, err = json.Marshal(title)
+
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	w.Write(b)

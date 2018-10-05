@@ -38,7 +38,7 @@ func (r *TitlesRepository) FetchTitle(id string) (*models.Title, error) {
 	)
 
 	if err != nil {
-		panic(err)
+		return nil, nil
 	}
 
 	return t, nil

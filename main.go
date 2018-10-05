@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mvanbrummen/go-rest/middleware"
 	"github.com/mvanbrummen/go-rest/repository"
 
 	"github.com/gorilla/mux"
@@ -59,6 +60,8 @@ func main() {
 	log.Println("Connected to DB successfully")
 
 	r := mux.NewRouter()
+
+	r.Use(middleware.ContentTypeMW)
 
 	titlesRepository := repository.NewTitlesRepository(db)
 
