@@ -1,13 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/mvanbrummen/go-rest/repository"
+
 	"github.com/gorilla/mux"
+	"github.com/mvanbrummen/go-rest/http"
 	"github.com/spf13/viper"
+
+	_ "github.com/lib/pq"
 )
 
 func init() {
@@ -25,11 +31,28 @@ func init() {
 func main() {
 	port := viper.GetInt("application.port")
 
+	dbHost := viper.GetString("db.host")
+	dbPort := viper.GetInt("db.port")
+	dbName := viper.GetString("db.name")
+	dbUser := viper.GetString("db.user")
+	dbPassword := viper.GetString("db.password")
+
+	connectionString := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		dbHost, dbPort, dbUser, dbPassword, dbName)
+
+	db, err := sql.Open("postgres", connectionString)
+
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Fuck you"))
-	})
+	titlesRepository := repository.NewTitlesRepository(db)
+
+	handler.NewTitlesHandler(r, titlesRepository)
 
 	srv := &http.Server{
 		Handler:      r,
