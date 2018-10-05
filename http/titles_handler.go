@@ -37,6 +37,24 @@ func (t *TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
+func (t *TitlesHandler) SearchTitle(w http.ResponseWriter, r *http.Request) {
+	searchTerm := r.FormValue("search")
+
+	results, err := t.titlesRepository.SearchByTitle(searchTerm, 10)
+
+	if err != nil {
+		panic(err)
+	}
+
+	b, err := json.Marshal(results)
+
+	if err != nil {
+		panic(err)
+	}
+
+	w.Write(b)
+}
+
 func NewTitlesHandler(r *mux.Router, titlesRepository *repository.TitlesRepository) {
 	handler := &TitlesHandler{
 		r,
@@ -44,4 +62,5 @@ func NewTitlesHandler(r *mux.Router, titlesRepository *repository.TitlesReposito
 	}
 
 	r.HandleFunc("/titles/{id}", handler.GetTitle)
+	r.Path("/titles").Queries("search", "{search}").HandlerFunc(handler.SearchTitle)
 }
