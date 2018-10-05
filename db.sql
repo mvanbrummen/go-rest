@@ -11,3 +11,7 @@ CREATE TABLE imdb.titles (
 	runtimeMinutes INTEGER,
 	genres VARCHAR(250)
 );
+
+CREATE ROLE imdb_ro WITH LOGIN ENCRYPTED PASSWORD 'Password@1';
+GRANT USAGE ON SCHEMA imdb TO imdb_ro; 
+GRANT SELECT ON ALL TABLES IN SCHEMA imdb TO imdb_ro;

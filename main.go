@@ -36,10 +36,11 @@ func main() {
 	dbName := viper.GetString("db.name")
 	dbUser := viper.GetString("db.user")
 	dbPassword := viper.GetString("db.password")
+	dbSchema := viper.GetString("db.schema")
 
 	connectionString := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
+		"password=%s dbname=%s sslmode=disable search_path=%s",
+		dbHost, dbPort, dbUser, dbPassword, dbName, dbSchema)
 
 	log.Println("DB connection string" + connectionString)
 

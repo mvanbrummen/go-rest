@@ -2,8 +2,9 @@ db:
   host: localhost
   port: 5432
   name: imdb
-  user: postgres
-  password:
+  user: imdb_ro
+  password: Password@1
+  schema: imdb
 
 application:
   port: 8000
