@@ -2,7 +2,9 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/mvanbrummen/go-rest/repository"
@@ -39,8 +41,23 @@ func (t *TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
 
 func (t *TitlesHandler) SearchTitle(w http.ResponseWriter, r *http.Request) {
 	searchTerm := r.FormValue("q")
+	limitParam := r.FormValue("limit")
 
-	results, err := t.titlesRepository.SearchByTitle(searchTerm, 10)
+	var limit int
+	if limitParam == "" {
+		limit = 10
+	} else {
+		var err error
+		limit, err = strconv.Atoi(limitParam)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			fmt.Fprintf(w, `{"error":"limit must be an integer"}`)
+			return
+		}
+	}
+
+	results, err := t.titlesRepository.SearchByTitle(searchTerm, limit)
 
 	if err != nil {
 		panic(err)
@@ -63,4 +80,5 @@ func NewTitlesHandler(r *mux.Router, titlesRepository *repository.TitlesReposito
 
 	r.HandleFunc("/titles/{id}", handler.GetTitle)
 	r.Path("/titles").Queries("q", "{q}").HandlerFunc(handler.SearchTitle)
+	r.Path("/titles").Queries("q", "{q}", "limit", "{limit}").HandlerFunc(handler.SearchTitle)
 }
