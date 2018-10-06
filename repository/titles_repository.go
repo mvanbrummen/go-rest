@@ -32,7 +32,7 @@ func (r *TitlesRepository) SearchByTitle(title string, limit int) ([]*models.Tit
 
 	result := make([]*models.Title, 0)
 	for rows.Next() {
-		t := new(models.Title)
+		t := new(models.TitleDAO)
 
 		err = rows.Scan(
 			&t.Tconst,
@@ -49,14 +49,14 @@ func (r *TitlesRepository) SearchByTitle(title string, limit int) ([]*models.Tit
 		if err != nil {
 			panic(err)
 		}
-		result = append(result, t)
+		result = append(result, t.ToTitle())
 	}
 
 	return result, nil
 }
 
 func (r *TitlesRepository) FetchTitle(id string) (*models.Title, error) {
-	t := new(models.Title)
+	t := new(models.TitleDAO)
 
 	query := `select tconst, titleType, primaryTitle, 
 	originalTitle, isAdult, startYear, endYear, 
@@ -82,5 +82,5 @@ func (r *TitlesRepository) FetchTitle(id string) (*models.Title, error) {
 		return nil, nil
 	}
 
-	return t, nil
+	return t.ToTitle(), nil
 }

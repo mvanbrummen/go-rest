@@ -38,7 +38,7 @@ func (t *TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *TitlesHandler) SearchTitle(w http.ResponseWriter, r *http.Request) {
-	searchTerm := r.FormValue("search")
+	searchTerm := r.FormValue("q")
 
 	results, err := t.titlesRepository.SearchByTitle(searchTerm, 10)
 
@@ -62,5 +62,5 @@ func NewTitlesHandler(r *mux.Router, titlesRepository *repository.TitlesReposito
 	}
 
 	r.HandleFunc("/titles/{id}", handler.GetTitle)
-	r.Path("/titles").Queries("search", "{search}").HandlerFunc(handler.SearchTitle)
+	r.Path("/titles").Queries("q", "{q}").HandlerFunc(handler.SearchTitle)
 }
