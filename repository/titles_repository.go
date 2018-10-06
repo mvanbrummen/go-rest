@@ -26,7 +26,7 @@ func (r *TitlesRepository) SearchByTitle(title string, limit int) ([]*models.Tit
 	rows, err := r.db.Query(query, title, limit)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -47,7 +47,7 @@ func (r *TitlesRepository) SearchByTitle(title string, limit int) ([]*models.Tit
 		)
 
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 		result = append(result, t.ToTitle())
 	}
@@ -79,7 +79,7 @@ func (r *TitlesRepository) FetchTitle(id string) (*models.Title, error) {
 	)
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	return t.ToTitle(), nil
