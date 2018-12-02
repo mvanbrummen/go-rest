@@ -11,8 +11,7 @@ import (
 )
 
 type TitlesHandler struct {
-	router           *mux.Router
-	titlesRepository *repository.TitlesRepository
+	titlesRepository repository.ITitlesRepository
 }
 
 func (t *TitlesHandler) GetTitle(w http.ResponseWriter, r *http.Request) {
@@ -71,13 +70,8 @@ func (t *TitlesHandler) SearchTitle(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func NewTitlesHandler(r *mux.Router, titlesRepository *repository.TitlesRepository) {
-	handler := &TitlesHandler{
-		r,
+func NewTitlesHandler(r *mux.Router, titlesRepository repository.ITitlesRepository) *TitlesHandler {
+	return &TitlesHandler{
 		titlesRepository,
 	}
-
-	r.HandleFunc("/titles/{id}", handler.GetTitle)
-	r.Path("/titles").Queries("q", "{q}").HandlerFunc(handler.SearchTitle)
-	r.Path("/titles").Queries("q", "{q}", "limit", "{limit}").HandlerFunc(handler.SearchTitle)
 }

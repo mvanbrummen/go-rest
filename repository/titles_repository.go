@@ -6,6 +6,11 @@ import (
 	"github.com/mvanbrummen/go-rest/models"
 )
 
+type ITitlesRepository interface {
+	SearchByTitle(title string, limit int) ([]*models.Title, error)
+	FetchTitle(id string) (*models.Title, error)
+}
+
 type TitlesRepository struct {
 	db *sql.DB
 }

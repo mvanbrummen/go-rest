@@ -10,7 +10,7 @@ import (
 	"github.com/mvanbrummen/go-rest/repository"
 
 	"github.com/gorilla/mux"
-	"github.com/mvanbrummen/go-rest/http"
+	"github.com/mvanbrummen/go-rest/handler"
 	"github.com/spf13/viper"
 
 	log "github.com/sirupsen/logrus"
@@ -68,7 +68,11 @@ func main() {
 
 	titlesRepository := repository.NewTitlesRepository(db)
 
-	handler.NewTitlesHandler(r, titlesRepository)
+	handler := handler.NewTitlesHandler(r, titlesRepository)
+
+	r.HandleFunc("/titles/{id}", handler.GetTitle)
+	r.Path("/titles").Queries("q", "{q}").HandlerFunc(handler.SearchTitle)
+	r.Path("/titles").Queries("q", "{q}", "limit", "{limit}").HandlerFunc(handler.SearchTitle)
 
 	n := negroni.Classic()
 	n.UseHandler(r)
