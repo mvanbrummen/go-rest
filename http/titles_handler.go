@@ -43,18 +43,17 @@ func (t *TitlesHandler) SearchTitle(w http.ResponseWriter, r *http.Request) {
 	searchTerm := r.FormValue("q")
 	limitParam := r.FormValue("limit")
 
-	var limit int
 	if limitParam == "" {
-		limit = 10
-	} else {
-		var err error
-		limit, err = strconv.Atoi(limitParam)
+		limitParam = "10"
+	}
 
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, `{"error":"limit must be an integer"}`)
-			return
-		}
+	var err error
+	limit, err := strconv.Atoi(limitParam)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, `{"error":"limit must be an integer"}`)
+		return
 	}
 
 	results, err := t.titlesRepository.SearchByTitle(searchTerm, limit)
