@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -13,6 +12,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/mvanbrummen/go-rest/http"
 	"github.com/spf13/viper"
+
+	log "github.com/sirupsen/logrus"
 
 	_ "github.com/lib/pq"
 )

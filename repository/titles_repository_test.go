@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"log"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
