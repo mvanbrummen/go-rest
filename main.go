@@ -15,6 +15,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/urfave/negroni"
+
 	_ "github.com/lib/pq"
 )
 
@@ -68,8 +70,11 @@ func main() {
 
 	handler.NewTitlesHandler(r, titlesRepository)
 
+	n := negroni.Classic()
+	n.UseHandler(r)
+
 	srv := &http.Server{
-		Handler:      r,
+		Handler:      n,
 		Addr:         fmt.Sprintf(":%d", port),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
