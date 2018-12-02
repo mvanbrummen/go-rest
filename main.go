@@ -68,7 +68,7 @@ func main() {
 
 	titlesRepository := repository.NewTitlesRepository(db)
 
-	handler := handler.NewTitlesHandler(r, titlesRepository)
+	handler := handler.NewTitlesHandler(titlesRepository)
 
 	r.HandleFunc("/titles/{id}", handler.GetTitle)
 	r.Path("/titles").Queries("q", "{q}").HandlerFunc(handler.SearchTitle)

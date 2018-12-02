@@ -70,7 +70,7 @@ func (t *TitlesHandler) SearchTitle(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func NewTitlesHandler(r *mux.Router, titlesRepository repository.ITitlesRepository) *TitlesHandler {
+func NewTitlesHandler(titlesRepository repository.ITitlesRepository) *TitlesHandler {
 	return &TitlesHandler{
 		titlesRepository,
 	}
